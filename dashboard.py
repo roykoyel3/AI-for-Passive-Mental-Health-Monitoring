@@ -4,6 +4,7 @@ import random
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import altair as alt
+from streamlit_echarts import st_echarts
 
 # Page title
 st.title("Passive Mental Health Dashboard")
@@ -31,29 +32,68 @@ left_col, spacer, right_col = st.columns([1, 0.5, 2])  # Adjust middle value to 
 
 # LEFT COLUMN: Scores stacked
 with left_col:
-   # Display scores
-    st.markdown("<div style='padding: 10px;'>Individual Fatigue Scores</div>", unsafe_allow_html=True)
-    st.write(f"Typing Score: {typing}")
-    st.write(f"Voice Score: {voice}")
-    st.write(f"Screen Score: {screen}")
+    
+    st.markdown("#### Fatigue Scores")
+    
+    def circular_progress_chart(score: float, label: str, color="#a592d8"):
+        option = {
+            "title": {
+                "text": f"{int(score * 20)}%",
+                "left": "center",
+                "top": "45%",
+                "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#2e2e2e",
+                },
+            },
+            "series": [
+                {
+                    "type": "pie",
+                    "radius": ["70%", "90%"],
+                    "center": ["50%", "50%"],
+                    "avoidLabelOverlap": False,
+                    "startAngle": 90,
+                    "label": {"show": False},
+                    "data": [
+                        {"value": score, "name": label, "itemStyle": {"color": color}},
+                        {"value": 5 - score, "name": "", "itemStyle": {"color": "#f0f0f0"}},
+                    ]
+                }
+            ],
+            "graphic": [
+                {
+                    "type": "text",
+                    "left": "center",
+                    "top": "30%",
+                    "style": {
+                        "text": label,
+                        "fontSize": 16,
+                        "fill": "#555"
+                    }
+                }
+            ]
+        }
 
-    st.markdown("---")
+        st_echarts(options=option, height="200px")
     
-    # Show result
-    st.subheader("Burnout Score")
-    st.metric("Overall Score (0–5)", burnout_score)
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(typing, "Typing")
+    st.markdown('</div>', unsafe_allow_html=True)
     
-    # Show suggestion
-    if burnout_score > 4:
-       st.error("High burnout risk! Please take a break.")
-    elif burnout_score > 2.5:
-        st.warning("Moderate fatigue. Monitor your workload.")
-    else:
-        st.success("You're doing great! Keep going.")
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(voice, "Voice")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(screen, "Screen")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+   
 
 # RIGHT COLUMN: SHAP-style bar chart
 with right_col:
-    st.markdown("### SHAP-style Breakdown")
+    st.markdown("### Contribution-Explanation")
     
     #Defining weights
     weights = {"Typing": 0.3,
@@ -80,7 +120,7 @@ with right_col:
     ))
 
     fig.update_layout(
-        height=400,
+        height=450,
         xaxis_title="Modality",
         yaxis_title="Contribution Score",
         margin=dict(l=30, r=40, t=30, b=30),
@@ -88,17 +128,56 @@ with right_col:
     )
 
     st.plotly_chart(fig, use_container_width=True)
-
-
     
+    # Show result
+    st.subheader("Burnout Score")
+    st.metric("Overall Score (0–5)", burnout_score)
+    
+    fig = go.Figure(go.Bar(
+        x=[burnout_score],
+       # y=["Burnout Score"],
+        orientation='h',
+        marker=dict(color='#835bd3'),
+        width=0.4,
+        text=[f"{burnout_score:.2f} / 5"],
+        textposition='inside'
+    ))
+    
+    fig.update_layout(
+        height=150,
+        width=2000,
+        xaxis_title="Burnout Score",
+        yaxis_title="Range",
+        margin=dict(l=20, r=20, t=20, b=20),
+        template="simple_white"
+    )
+    
+    left, right = st.columns([9, 1])  # 2:1 ratio, chart stays on left
+
+    with left:
+        st.plotly_chart(fig, use_container_width=True)
+
+
+
+    # st.plotly_chart(fig, use_container_width=False)
+
+
+
+st.subheader("Suggestion for you:")
+# Show suggestion
+if burnout_score > 4:
+    st.error("High burnout risk! Please take a break.")
+elif burnout_score > 2.5:
+    st.warning("Moderate fatigue. Monitor your workload.")
+else:
+    st.success("You're doing great! Keep going.")
     
 
 # Existing code here (data loading, burnout score, etc.)
 
 # Divider
 st.markdown("---")
-st.header("Mental Health Support Chatbot")
-st.write("Feel free to share")
+st.header("Mental Health Support Chatbot !!")
 
 # Initialize session state for chat history
 if "chat_history" not in st.session_state:
