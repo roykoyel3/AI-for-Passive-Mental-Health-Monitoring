@@ -10,7 +10,7 @@ def show_chatbot():
     if "chat_input" not in st.session_state:
         st.session_state.chat_input=""
 
-# Function to generate response
+# Coping Prompt to generate response
     def get_bot_response(user_input):
         user_input = user_input.lower()
         if "stress" in user_input or "devastated" in user_input:

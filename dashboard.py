@@ -6,16 +6,16 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import altair as alt
 from streamlit_echarts import st_echarts
-from fatigue_scores import show_fatigues
+from fatigue_charts import show_fatigues
 from chatbot import show_chatbot
+from scores import get_user, get_score, burnout
 
 
 # Page title
 st.title("Passive Mental Health Dashboard")
 st.markdown("---")
 
-# Load data
-df = pd.read_csv("fused_scores.csv")
+
 
 with st.sidebar:
     st.header("Navigation")
@@ -93,26 +93,17 @@ st.markdown("""
 
     
 
-# left,right=st.columns(2)
-# with left:
-    #Show user selector
-#     user_list=df['user_id'].unique().tolist()
-#     selected_user=st.selectbox("Select a user", user_list)
+left,right=st.columns(2)
 
-# # Get that user's row
-# user_data = df[df['user_id'] == selected_user].iloc[0]
-
-# Select first user for now
-user_data = df.iloc[0]
-
+with left:
+    # Get the latest user details
+    user_data=get_user()
+    
 # Extract scores
-typing = user_data['typing_score']
-voice = user_data['voice_score']
-screen = user_data['screen_score']
-
+typing, voice, screen = get_score(user_data)
+    
 # Calculate burnout score
-burnout_score = round(typing * 0.3 + voice * 0.4 + screen * 0.3, 2)
-
+burnout_score=burnout(typing, voice, screen)
 
 # Create two columns
 # left_col, right_col = st.columns([1, 2])  # Wider right column for chart
@@ -124,7 +115,7 @@ with left_col:
     st.markdown("### Fatigue Scores")
     
     # Fatigue_scores chart
-    show_fatigues()
+    show_fatigues(typing,voice,screen)
     
     
 # RIGHT COLUMN: SHAP-style bar chart

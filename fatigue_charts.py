@@ -2,23 +2,6 @@ import streamlit as st
 import pandas as pd
 from streamlit_echarts import st_echarts
 
-df=pd.read_csv("fused_scores.csv")
-#Show user selector
-user_list=df['user_id'].unique().tolist()
-selected_user=st.selectbox("Select a user", user_list)
-
-# Get that user's row
-user_data = df[df['user_id'] == selected_user].iloc[0]
-
-# Select first user for now
-user_data = df.iloc[0]
-
-# Extract scores
-typing = user_data['typing_score']
-voice = user_data['voice_score']
-screen = user_data['screen_score']
-
-
 def circular_progress_chart(score: float, label: str, color="#6b50b5"):
         option = {
             "title": {
@@ -61,7 +44,7 @@ def circular_progress_chart(score: float, label: str, color="#6b50b5"):
 
         st_echarts(options=option, height="200px")
     
-def show_fatigues():
+def show_fatigues(typing,voice,screen):
     st.markdown('<div class="score-card">', unsafe_allow_html=True)
     circular_progress_chart(typing, "Typing")
     st.markdown('</div>', unsafe_allow_html=True)
