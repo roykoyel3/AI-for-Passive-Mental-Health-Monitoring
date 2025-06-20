@@ -9,6 +9,8 @@ from streamlit_echarts import st_echarts
 from fatigue_charts import show_fatigues
 from chatbot import show_chatbot
 from scores import get_user, get_score, burnout
+from shap import shap
+from burnout import get_burnout, get_sugg
 
 
 # Page title
@@ -106,8 +108,7 @@ typing, voice, screen = get_score(user_data)
 burnout_score=burnout(typing, voice, screen)
 
 # Create two columns
-# left_col, right_col = st.columns([1, 2])  # Wider right column for chart
-left_col, spacer, right_col= st.columns([1, 0.5, 2])  # Adjust middle value to increase gap
+left_col, spacer, right_col= st.columns([1, 0.5, 2])  
 
 # LEFT COLUMN: Scores stacked
 with left_col:
@@ -122,79 +123,18 @@ with left_col:
 with right_col:
     
     st.markdown("### Contribution-Explanation")
+    shap(typing, voice, screen)
     
-    #Defining weights
-    weights = {"Typing": 0.3,
-               "Voice": 0.4, 
-               "Screen": 0.3}
     
-    #Calculated weighted contributions(SHAP-style)
-    contributions = {
-        "Typing": weights["Typing"] * typing,
-        "Voice": weights["Voice"] * voice,
-        "Screen": weights["Screen"] * screen
-    }
-
-    fig = go.Figure(go.Bar(
-        x=list(contributions.keys()),
-        y=list(contributions.values()),
-        # orientation='h',
-        marker_color=['#bfb3de', '#a592d8', '#8a6cd4'],
-         text=[
-        f"Modality: {modality} | Contribution: {score:.2f}"
-        for modality, score in contributions.items()
-    ],
-        textposition="outside"
-    ))
-
-    fig.update_layout(
-        height=450,
-        xaxis_title="Modality",
-        yaxis_title="Contribution Score",
-        margin=dict(l=30, r=40, t=30, b=30),
-        template="simple_white"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Show result
+    # Show Burnout result
     st.subheader("Burnout Score")
     st.metric("Overall Score (0–5)", burnout_score)
-    
-    fig = go.Figure(go.Bar(
-        x=[burnout_score],
-       # y=["Burnout Score"],
-        orientation='h',
-        marker=dict(color='#835bd3'),
-        width=0.4,
-        text=[f"{burnout_score:.2f} / 5"],
-        textposition='inside'
-    ))
-    
-    fig.update_layout(
-        height=150,
-        width=2000,
-        xaxis_title="Burnout Score",
-        yaxis_title="Range",
-        margin=dict(l=20, r=20, t=20, b=20),
-        template="simple_white"
-    )
-    
-    st.plotly_chart(fig, use_container_width=False)
-
-
-
+    get_burnout(burnout_score)
+        
 st.subheader("Suggestion for you:")
 # Show suggestion
-if burnout_score > 4:
-    st.error("High burnout risk! Please take a break.")
-elif burnout_score > 2.5:
-    st.warning("Moderate fatigue. Monitor your workload.")
-else:
-    st.success("You're doing great! Keep going.")
-    
+get_sugg(burnout_score)
 
-# Existing code here (data loading, burnout score, etc.)
 
 # Chatbot
 st.markdown("---")
