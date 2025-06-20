@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import altair as alt
 from streamlit_echarts import st_echarts
+from fatigue_scores import show_fatigues
+from chatbot import show_chatbot
 
 
 # Page title
@@ -91,14 +93,14 @@ st.markdown("""
 
     
 
-left,right=st.columns(2)
-with left:
+# left,right=st.columns(2)
+# with left:
     #Show user selector
-    user_list=df['user_id'].unique().tolist()
-    selected_user=st.selectbox("Select a user", user_list)
+#     user_list=df['user_id'].unique().tolist()
+#     selected_user=st.selectbox("Select a user", user_list)
 
-# Get that user's row
-user_data = df[df['user_id'] == selected_user].iloc[0]
+# # Get that user's row
+# user_data = df[df['user_id'] == selected_user].iloc[0]
 
 # Select first user for now
 user_data = df.iloc[0]
@@ -121,63 +123,13 @@ with left_col:
     
     st.markdown("### Fatigue Scores")
     
-    def circular_progress_chart(score: float, label: str, color="#a592d8"):
-        option = {
-            "title": {
-                "text": f"{int(score * 20)}%",
-                "left": "center",
-                "top": "45%",
-                "textStyle": {
-                    "fontSize": 24,
-                    "fontWeight": "bold",
-                    "color": "#2e2e2e",
-                },
-            },
-            "series": [
-                {
-                    "type": "pie",
-                    "radius": ["70%", "90%"],
-                    "center": ["50%", "50%"],
-                    "avoidLabelOverlap": False,
-                    "startAngle": 90,
-                    "label": {"show": False},
-                    "data": [
-                        {"value": score, "name": label, "itemStyle": {"color": color}},
-                        {"value": 5 - score, "name": "", "itemStyle": {"color": "#f0f0f0"}},
-                    ]
-                }
-            ],
-            "graphic": [
-                {
-                    "type": "text",
-                    "left": "center",
-                    "top": "30%",
-                    "style": {
-                        "text": label,
-                        "fontSize": 16,
-                        "fill": "#555"
-                    }
-                }
-            ]
-        }
-
-        st_echarts(options=option, height="200px")
+    # Fatigue_scores chart
+    show_fatigues()
     
-    st.markdown('<div class="score-card">', unsafe_allow_html=True)
-    circular_progress_chart(typing, "Typing")
-    st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown('<div class="score-card">', unsafe_allow_html=True)
-    circular_progress_chart(voice, "Voice")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    st.markdown('<div class="score-card">', unsafe_allow_html=True)
-    circular_progress_chart(screen, "Screen")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-
 # RIGHT COLUMN: SHAP-style bar chart
 with right_col:
+    
     st.markdown("### Contribution-Explanation")
     
     #Defining weights
@@ -253,81 +205,8 @@ else:
 
 # Existing code here (data loading, burnout score, etc.)
 
-# Divider
+# Chatbot
 st.markdown("---")
-st.header("Mental Health Support Chatbot !!")
-
-# Initialize session state for chat history
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-if "chat_input" not in st.session_state:
-        st.session_state.chat_input=""
-
-# Function to generate response
-def get_bot_response(user_input):
-    user_input = user_input.lower()
-    if "stress" in user_input or "devastated" in user_input:
-        return "It's okay to feel stressed. Try taking deep breaths or a short break."
-    elif "anxious" in user_input or "anxiety" in user_input:
-        return "Anxiety can be tough. Try grounding techniques like naming 5 things you see around you."
-    elif "sad" in user_input or "depressed" in user_input:
-        return "You're not alone. It might help to talk to a friend or a counselor."
-    elif "tired" in user_input or "burnout" in user_input:
-        return "Burnout is real. Consider taking short breaks or talking to someone about your workload."
-    elif "angry" in user_input or "rage" in user_input:
-        return "That sounds really frustrating. It's okay to feel upset sometimes. Feel free to reach out."
-    elif "afraid" in user_input or "fear" in user_input:
-        return "Don't worry. Your feelings are safe here. What's making you feel this way?"
-    elif "not okay" in user_input or "low" in user_input or "drained" in user_input:
-        return "I'm sorry you have to go through this but opening up can help you a lot. Always there for help." 
-    elif "happy" in user_input or "relaxed" in user_input:
-        return "That's amazing to hear! Wanna tell more about your day?"
-    else:
-        return "I'm here for you if you feel like sharing more about how you're feeling."
-
-# Chatbot input placeholder options
-placeholder_options = [
-    "How do you feel today?",
-    "You can tell me anything.",
-    "Need a break?",
-    "Feeling okay?",
-    "What’s on your mind?"
-]
-
-# Pick one randomly on each run
-if "placeholder" not in st.session_state:
-    st.session_state.placeholder = random.choice(placeholder_options)
+show_chatbot()
 
 
-# Callback to process input and clear it
-def handle_input():
-    user_input = st.session_state.chat_input
-    if user_input:
-        st.session_state.chat_history.append(f"You: {user_input}")
-        bot_response= get_bot_response(user_input)
-        st.session_state.chat_history.append(f"Bot: {bot_response}'")
-    st.session_state.chat_input = ""  # Auto-clear
-
-
-# Display chat history
-for msg in st.session_state.chat_history:
-    st.write(msg)
-
-# Input field with auto-clear on enter
-st.text_input("Type your message:",
-              key="chat_input", 
-              on_change=handle_input, 
-              placeholder=st.session_state.placeholder)
-
-
-# st.markdown("""
-# <style>
-#     .element-container {
-#         border-radius: 20px;
-#         box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-#         padding: 1.5rem;
-#         background-color: #fdfdfd;
-#         margin-bottom: 1rem;
-#     }
-# </style>
-# """, unsafe_allow_html=True)

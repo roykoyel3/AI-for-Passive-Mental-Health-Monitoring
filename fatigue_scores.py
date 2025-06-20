@@ -3,6 +3,12 @@ import pandas as pd
 from streamlit_echarts import st_echarts
 
 df=pd.read_csv("fused_scores.csv")
+#Show user selector
+user_list=df['user_id'].unique().tolist()
+selected_user=st.selectbox("Select a user", user_list)
+
+# Get that user's row
+user_data = df[df['user_id'] == selected_user].iloc[0]
 
 # Select first user for now
 user_data = df.iloc[0]
@@ -11,6 +17,7 @@ user_data = df.iloc[0]
 typing = user_data['typing_score']
 voice = user_data['voice_score']
 screen = user_data['screen_score']
+
 
 def circular_progress_chart(score: float, label: str, color="#6b50b5"):
         option = {
@@ -54,14 +61,18 @@ def circular_progress_chart(score: float, label: str, color="#6b50b5"):
 
         st_echarts(options=option, height="200px")
     
-st.markdown('<div class="score-card">', unsafe_allow_html=True)
-circular_progress_chart(typing, "Typing")
-st.markdown('</div>', unsafe_allow_html=True)
+def show_fatigues():
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(typing, "Typing")
+    st.markdown('</div>', unsafe_allow_html=True)
     
-st.markdown('<div class="score-card">', unsafe_allow_html=True)
-circular_progress_chart(voice, "Voice")
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(voice, "Voice")
+    st.markdown('</div>', unsafe_allow_html=True)
     
-st.markdown('<div class="score-card">', unsafe_allow_html=True)
-circular_progress_chart(screen, "Screen")
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="score-card">', unsafe_allow_html=True)
+    circular_progress_chart(screen, "Screen")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+
