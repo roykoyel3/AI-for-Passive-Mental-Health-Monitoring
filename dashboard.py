@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(layout="wide")
 import pandas as pd
 import random
 import matplotlib.pyplot as plt
@@ -6,12 +7,98 @@ import plotly.graph_objects as go
 import altair as alt
 from streamlit_echarts import st_echarts
 
+
 # Page title
 st.title("Passive Mental Health Dashboard")
 st.markdown("---")
 
 # Load data
 df = pd.read_csv("fused_scores.csv")
+
+with st.sidebar:
+    st.header("Navigation")
+    st.button("Home")
+    st.button("Statistics")
+    st.button("Burnout Analysis")
+    st.button("Chatbot")
+    
+
+# Custom CSS
+st.markdown("""
+    <style>
+        [data-testid="stSidebar"]{
+            background-color:transparent !important; 
+        }
+        
+        /* Main sidebar style */
+        [data-testid="stSidebar"] > div:first-child {
+            background-color: #0e1117 !important; /* semi-transparent bg */
+            border-radius: 20px;
+            margin: 50px 10px 50px 10px;
+            padding: 50px 10px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 0 7px rgba(85, 0, 255, 0.4);  /* blue-purple soft glow */
+            border: 1px solid rgba(180, 100, 255, 0.2);  /* soft tinted border */
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* On hover: slight scale and brighter glow */
+        [data-testid="stSidebar"] > div:first-child:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 10px rgba(130, 80, 255, 0.6);
+        }
+        
+        /* Make sidebar full height flex container */
+        [data-testid="stSidebar"] > div:first-child {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;  /* Center vertically */
+            height: 100vh;
+        }
+          
+        /* Sidebar heading */
+        .css-1v0mbdj h2 {
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Button style (optional tweak) */
+        .stButton>button {
+            border-radius: 12px;
+            background-color: #2c2f36;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px 0px;
+            transition: 0.3s ease-in-out;
+            border: 1px solid #444;
+        }
+
+        .stButton>button:hover {
+            background-color: #4b4e56;
+            transform: scale(1.02);
+            border: 1px solid #888;
+        
+        [data-testid="stSidebar"] > div:first-child {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+    </style>
+""", unsafe_allow_html=True)
+
+    
+
+left,right=st.columns(2)
+with left:
+    #Show user selector
+    user_list=df['user_id'].unique().tolist()
+    selected_user=st.selectbox("Select a user", user_list)
+
+# Get that user's row
+user_data = df[df['user_id'] == selected_user].iloc[0]
 
 # Select first user for now
 user_data = df.iloc[0]
@@ -27,13 +114,12 @@ burnout_score = round(typing * 0.3 + voice * 0.4 + screen * 0.3, 2)
 
 # Create two columns
 # left_col, right_col = st.columns([1, 2])  # Wider right column for chart
-left_col, spacer, right_col = st.columns([1, 0.5, 2])  # Adjust middle value to increase gap
-
+left_col, spacer, right_col= st.columns([1, 0.5, 2])  # Adjust middle value to increase gap
 
 # LEFT COLUMN: Scores stacked
 with left_col:
     
-    st.markdown("#### Fatigue Scores")
+    st.markdown("### Fatigue Scores")
     
     def circular_progress_chart(score: float, label: str, color="#a592d8"):
         option = {
@@ -88,8 +174,7 @@ with left_col:
     st.markdown('<div class="score-card">', unsafe_allow_html=True)
     circular_progress_chart(screen, "Screen")
     st.markdown('</div>', unsafe_allow_html=True)
-
-   
+    
 
 # RIGHT COLUMN: SHAP-style bar chart
 with right_col:
@@ -152,14 +237,7 @@ with right_col:
         template="simple_white"
     )
     
-    left, right = st.columns([9, 1])  # 2:1 ratio, chart stays on left
-
-    with left:
-        st.plotly_chart(fig, use_container_width=True)
-
-
-
-    # st.plotly_chart(fig, use_container_width=False)
+    st.plotly_chart(fig, use_container_width=False)
 
 
 
@@ -242,3 +320,14 @@ st.text_input("Type your message:",
               placeholder=st.session_state.placeholder)
 
 
+# st.markdown("""
+# <style>
+#     .element-container {
+#         border-radius: 20px;
+#         box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+#         padding: 1.5rem;
+#         background-color: #fdfdfd;
+#         margin-bottom: 1rem;
+#     }
+# </style>
+# """, unsafe_allow_html=True)

@@ -1,2 +1,6 @@
-user_id,typing_score,voice_score,screen_score
-koyel,2.8,3.9,3.3
+user_id,typing_score,voice_score,screen_score,burnout_score,date
+User A,2.8,3.1,2.9,2.92,2025-06-19
+User B,1.2,2.3,3.8,2.31,2025-06-19
+User C,3.7,1.4,2.1,2.53,2025-06-19
+User D,0.9,1.1,1.2,1.05,2025-06-19
+User E,4.2,3.5,4.0,3.93,2025-06-19
