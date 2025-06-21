@@ -4,12 +4,12 @@ import pandas as pd
 def get_user():
     # Load data
     df = pd.read_csv("fused_scores.csv")
-    # Show user selector
-    user_list=df['user_id'].unique().tolist()
-    selected_user=st.selectbox("Select a user", user_list, key="user_selectbox")
+    # # Show user selector
+    # user_list=df['user_id'].unique().tolist()
+    # selected_user=st.selectbox("Select a user", user_list, key="user_selectbox")
 
-    # Get that user's row
-    user_data = df[df['user_id'] == selected_user].iloc[0]
+    # # Get that user's row
+    # user_data = df[df['user_id'] == selected_user].iloc[0]
 
     # Select first user for now
     user_data = df.iloc[0]
