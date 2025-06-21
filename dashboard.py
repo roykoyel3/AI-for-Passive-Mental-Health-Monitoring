@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import altair as alt
 from streamlit_echarts import st_echarts
 from fatigue_charts import show_fatigues
-from chatbot import show_chatbot
+from pages.chatbot import show_chatbot
 from scores import get_user, get_score, burnout
 from shap import shap
 from burnout import get_burnout, get_sugg
@@ -56,13 +56,13 @@ with right_col:
     st.metric("Overall Score (0–5)", burnout_score)
     get_burnout(burnout_score)
         
-st.subheader("Suggestion for you:")
-# Show suggestion
-get_sugg(burnout_score)
+# st.subheader("Suggestion for you:")
+# # Show suggestion
+# get_sugg(burnout_score)
 
 
-# Chatbot
-st.markdown("---")
-show_chatbot()
+# # Chatbot
+# st.markdown("---")
+# show_chatbot()
 
 

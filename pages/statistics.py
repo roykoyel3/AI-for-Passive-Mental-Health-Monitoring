@@ -8,6 +8,9 @@ import streamlit as st
 import plotly.graph_objects as go
 from scores import get_score, get_user
 from shap import shap
+from gui import get_gui
+
+get_gui()
 
 user_data=get_user()
 typing, voice, screen= get_score(user_data)

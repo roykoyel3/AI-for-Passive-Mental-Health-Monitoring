@@ -1,10 +1,14 @@
 import streamlit as st 
 import random
 from coping_prompts import get_coping_prompt
+from gui import get_gui
 # from emotion_detector import detect_emotion
 
+get_gui()
+
 def show_chatbot():
-    st.header("Mental Health Support Chatbot !!")
+    st.title("        ")
+    st.title("Mental Health Support Chatbot !!")
 
 # Initialize session state for chat history
     if "chat_history" not in st.session_state:
@@ -72,3 +76,5 @@ def show_chatbot():
     # user_input = st.text_input("How are you feeling?")
     # emotion = "anxiety"
     response = get_coping_prompt(user_input)
+
+show_chatbot()
