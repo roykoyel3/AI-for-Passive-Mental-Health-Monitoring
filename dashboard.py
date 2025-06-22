@@ -8,7 +8,7 @@ from streamlit_echarts import st_echarts
 from fatigue_charts import show_fatigues
 from pages.CHATBOT import show_chatbot
 from scores import get_user, get_score, burnout
-from shap import shap
+from shap_analysis import shap_analysis
 from burnout import get_burnout, get_sugg
 from gui import get_gui
 
@@ -51,7 +51,7 @@ with left_col:
 with right_col:
     
     st.markdown("### Contribution-Explanation")
-    shap(typing, voice, screen)
+    shap_analysis(typing, voice, screen)
     
     
     # Show Burnout result

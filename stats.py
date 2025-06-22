@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import streamlit as st 
 import plotly.graph_objects as go
 from scores import get_score, get_user
-from shap import shap
+from shap_analysis import shap_analysis
 from gui import get_gui
 
 get_gui()
@@ -35,7 +35,7 @@ st.markdown('<div class="subtitle">SHapley Additive exPlanations', unsafe_allow_
 st.markdown("---")
 
 # SHAP-chart
-shap(typing, voice, screen)
+shap_analysis(typing, voice, screen)
 
 st.markdown("The analysis below breaks down how different aspects of your digital behaviour- typing patterns, voice cues and screen engagement- have contributed to your current fatigue.")
 st.markdown("---")
