@@ -8,7 +8,11 @@ get_gui()
 
 def show_chatbot():
     st.title("        ")
-    st.title("Mental Health Support Chatbot !!")
+    st.markdown(
+    "<h1 style='color: #866fc6;'>Mental Health Support Chatbot!!</h1>",
+    unsafe_allow_html=True
+)
+
 
 # Initialize session state for chat history
     if "chat_history" not in st.session_state:

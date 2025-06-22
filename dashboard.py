@@ -4,17 +4,20 @@ import pandas as pd
 import random
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-import altair as alt
 from streamlit_echarts import st_echarts
 from fatigue_charts import show_fatigues
-from pages.chatbot import show_chatbot
+from pages.CHATBOT import show_chatbot
 from scores import get_user, get_score, burnout
 from shap import shap
 from burnout import get_burnout, get_sugg
 from gui import get_gui
 
 # Page title
-st.title("Passive Mental Health Dashboard")
+st.markdown(
+    "<h1 style='color: #866fc6;'>Passive Mental Health Dashboard</h1>",
+    unsafe_allow_html=True
+)
+
 st.markdown("---")
 
 get_gui()

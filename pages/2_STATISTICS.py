@@ -12,11 +12,25 @@ from gui import get_gui
 
 get_gui()
 
+st.markdown("""
+    <style>
+     .subtitle {
+        color: #5c5c7a;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    </style>
+            """, unsafe_allow_html=True)
+
 user_data=get_user()
 typing, voice, screen= get_score(user_data)
 
-st.title("SHAP Explanation Statistics")
-st.markdown("(SHapley Additive exPlanations)")
+st.markdown(
+    "<h1 style='color: #866fc6;'>SHAP Explanation Statistics</h1>",
+    unsafe_allow_html=True
+)
+
+st.markdown('<div class="subtitle">SHapley Additive exPlanations', unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -34,6 +48,7 @@ scores={
 }
 
 st.header("Individual Analysis:")
+st.markdown(" ")
 
 # Individual explanations
 explanation=""
@@ -59,8 +74,20 @@ else:
     screen_exp = "Your screen behavior is moderately active and could trend toward fatigue.\n "
 
 # Combine individual explanations
-st.markdown(f"**Typing Score:{typing}**\n \n{typing_exp}\n **Voice Score:{voice}**\n {voice_exp}\n **Screen Score:{screen}**\n {screen_exp}\n")
+# st.markdown(f"**Typing Score:{typing}**\n \n{typing_exp}\n **Voice Score:{voice}**\n {voice_exp}\n **Screen Score:{screen}**\n {screen_exp}\n")
 
+col1, spacer, col2, spacer2, col3= st.columns([1,0.3,1,0.3,1])
+with col1:
+    st.markdown(f"**Typing Score:{typing}**\n \n{typing_exp}\n")
+
+with col2:
+     st.markdown(f"**Voice Score:{voice}**\n \n{voice_exp}\n")
+
+with col3:
+     st.markdown(f"**Screen Score:{screen}**\n \n{screen_exp}\n")
+
+
+     
 
 top_factor= max(scores, key=scores.get)
 
