@@ -50,6 +50,8 @@ regressor.fit(X_train, y_train)
 
 # Evaluation
 y_pred = regressor.predict(X_test) # Predicted Burnout score
-print(y_pred)
-print("RMSE:", mean_squared_error(y_test, y_pred)) # How close the predicted burnout scores are to the actual ones
-print("R² Score:", r2_score(y_test, y_pred)) #  How much of the variation in burnout scores is explained by the model
+st.markdown(y_pred)
+rmse= mean_squared_error(y_test,y_pred)
+st.markdown(f"RMSE:{rmse}") # How close the predicted burnout scores are to the actual ones
+rr=r2_score(y_test,y_pred)
+st.markdown(f"R² Score:{rr}") #  How much of the variation in burnout scores is explained by the model
