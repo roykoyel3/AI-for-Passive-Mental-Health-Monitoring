@@ -65,24 +65,27 @@ y= data['burnout_score']  #Target
 x_train, x_test, y_train, y_test= train_test_split(x, y, test_size=0.2, random_state=42)
 
 # Train model
-model = RandomForestRegressor()
+model = RandomForestRegressor().fit(x,y)
 model.fit(x_train, y_train)
 
 # SHAP Explainer
 explainer = shap.Explainer(model.predict, x_train)
+# explainer= shap.TreeExplainer(model)
 shap_values = explainer(x_train)
+print(type(shap_values))
+print("Length:", len(shap_values) if hasattr(shap_values, '__len__') else "No len()")
 
 # STREAMLIT INTEGRATION
 st.title("SHAP Analysis for Burnout Prediction")
 
 # SHAP Summary Plot (global explanation)
-st.subheader("📊 SHAP Summary Plot")
+st.subheader("SHAP Summary Plot")
 fig_summary, ax = plt.subplots()
 shap.summary_plot(shap_values, x_train, show=False)
 st.pyplot(fig_summary)
 
 # SHAP Force Plot (individual prediction explanation)
-st.subheader("⚡ Individual Prediction Force Plot")
+st.subheader("Individual Prediction Force Plot")
 index = st.slider("Select a user index", 0, len(data)-1, 0)
 fig_force, ax = plt.subplots(figsize=(10, 2))
 with plt.rc_context({'figure.figsize': (10, 2)}):
@@ -98,6 +101,31 @@ st.pyplot(plt.gcf())
 # st.pyplot(fig_force)
 
 # SHAP Bar Plot
-st.subheader("🔍 Feature Importance Bar Plot")
-shap.plots.bar(shap_values)
-st.pyplot(bbox_inches='tight')
+st.subheader("Feature Importance Bar Plot")
+# st.markdown(type(shap_values))
+# st.markdown(len(shap_values))
+# st.markdown( shap_values.shape)
+# st.markdown(shap_values.feature_names)
+# st.markdown(shap_values.values)
+# st.markdown( x_train.shape)
+
+# shap.plots.bar(shap_values)
+# st.pyplot(bbox_inches='tight')
+
+# Compute mean absolute SHAP values across all samples
+mean_shap = np.abs(shap_values.values).mean(axis=0)
+feature_names = shap_values.feature_names
+
+# Plot using matplotlib
+# plt.figure(figsize=(8, 4))
+# plt.barh(feature_names, mean_shap, color='teal')
+# plt.xlabel("Mean |SHAP value|")
+# plt.title("Global Feature Importance (Bar)")
+# plt.tight_layout()
+# plt.show()
+
+fig, ax = plt.subplots()
+ax.barh(feature_names, mean_shap, color='teal')
+ax.set_xlabel("Mean |SHAP value|")
+ax.set_title("Global Feature Importance (Bar)")
+st.pyplot(fig)
