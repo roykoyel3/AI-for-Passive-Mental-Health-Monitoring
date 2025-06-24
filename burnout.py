@@ -55,3 +55,4 @@ rmse= mean_squared_error(y_test,y_pred)
 st.markdown(f"RMSE:{rmse}") # How close the predicted burnout scores are to the actual ones
 rr=r2_score(y_test,y_pred)
 st.markdown(f"R² Score:{rr}") #  How much of the variation in burnout scores is explained by the model
+
