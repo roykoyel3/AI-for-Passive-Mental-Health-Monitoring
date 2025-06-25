@@ -66,11 +66,8 @@ regressor.fit(X_train, y_train)
 
 # Evaluation
 y_pred = regressor.predict(X_test) # Predicted Burnout score
-# print(y_pred)
-rmse=(mean_squared_error(y_test,y_pred))
-# st.markdown(f"RMSE:{rmse}") # How close the predicted burnout scores are to the actual ones
-rr=(r2_score(y_test,y_pred))
-# st.markdown(f"R² Score:{rr}") #  How much of the variation in burnout scores is explained by the model
+rmse=(mean_squared_error(y_test,y_pred)) # How close the predicted burnout scores are to the actual ones
+rr=(r2_score(y_test,y_pred)) #  How much of the variation in burnout scores is explained by the model
 
 
 
@@ -101,8 +98,6 @@ st.subheader(" Burnout Severity Classification (Across Users)")
 level_counts = burnout_level.value_counts()
 level_counts=level_counts.reindex(['Low','Moderate','High'], fill_value=0)
 st.bar_chart(level_counts)
-# st.write(burnout_level)
-# st.write(level_counts)
 
 st.subheader(" Common Fatigue Patterns Among Users")
 st.markdown('<div class="subtitle">Based on patterns from multiple users like you, we have identified common burnout patterns. Each color represents a group of users with similar fatigue combinations.</div>', unsafe_allow_html=True)

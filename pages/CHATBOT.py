@@ -1,7 +1,14 @@
+import os
+os.environ["STREAMLIT_WATCHER_TYPE"]="none"
 import streamlit as st 
 import random
+import sys
+sys.path.append('C:/Users/hp/OneDrive/Desktop/AI for Passive Mental Health Monitoring/')
 from coping_prompts import get_coping_prompt
+
+# from coping_prompts import get_coping_prompt
 from gui import get_gui
+from emotions import detect_emotion
 # from emotion_detector import detect_emotion
 
 get_gui()
@@ -20,29 +27,6 @@ def show_chatbot():
     if "chat_input" not in st.session_state:
         st.session_state.chat_input=""
 
-# Coping Prompt to generate response
-    # def get_bot_response(user_input):
-    #     user_input = user_input.lower()
-    #     if "stress" in user_input or "devastated" in user_input:
-    #         return "It's okay to feel stressed. Try taking deep breaths or a short break."
-    #     elif "anxious" in user_input or "anxiety" in user_input:
-    #         return "Anxiety can be tough. Try grounding techniques like naming 5 things you see around you."
-    #     elif "sad" in user_input or "depressed" in user_input:
-    #         return "You're not alone. It might help to talk to a friend or a counselor."
-    #     elif "tired" in user_input or "burnout" in user_input:
-    #         return "Burnout is real. Consider taking short breaks or talking to someone about your workload."
-    #     elif "angry" in user_input or "rage" in user_input:
-    #         return "That sounds really frustrating. It's okay to feel upset sometimes. Feel free to reach out."
-    #     elif "afraid" in user_input or "fear" in user_input:
-    #         return "Don't worry. Your feelings are safe here. What's making you feel this way?"
-    #     elif "not okay" in user_input or "low" in user_input or "drained" in user_input:
-    #         return "I'm sorry you have to go through this but opening up can help you a lot. Always there for help." 
-    #     elif "happy" in user_input or "relaxed" in user_input:
-    #         return "That's amazing to hear! Wanna tell more about your day?"
-    #     else:
-    #         return "I'm here for you if you feel like sharing more about how you're feeling."
-    
-
 # Chatbot input placeholder options
     placeholder_options = [
         "How do you feel today?",
@@ -56,13 +40,14 @@ def show_chatbot():
     if "placeholder" not in st.session_state:
         st.session_state.placeholder = random.choice(placeholder_options)
 
-
+      
 # Callback to process input and clear it
     def handle_input():
         user_input = st.session_state.chat_input
         if user_input:
             st.session_state.chat_history.append(f"You: {user_input}")
-            bot_response= get_coping_prompt(user_input)
+            emotion=detect_emotion(user_input)
+            bot_response= emotion   #get_coping_prompt(emotion)
             st.session_state.chat_history.append(f"Bot: {bot_response}'")
         st.session_state.chat_input = ""  # Auto-clear
 
@@ -77,8 +62,5 @@ def show_chatbot():
                 on_change=handle_input, 
                 placeholder=st.session_state.placeholder)
     
-    # user_input = st.text_input("How are you feeling?")
-    # emotion = "anxiety"
-    response = get_coping_prompt(user_input)
-
+    
 show_chatbot()

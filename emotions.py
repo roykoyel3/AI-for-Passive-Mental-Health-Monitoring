@@ -1,75 +1,64 @@
-# from datasets import load_dataset
-# from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
-# from sklearn.metrics import accuracy_score, f1_score
-# import torch
+# from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
-# # Load EmpatheticDialogues Dataset
-# dataset= load_dataset("empathetic_dialogues")
+# # Use slow tokenizer explicitly
+# model_name = "mrm8488/t5-base-finetuned-emotion"
+# tokenizer = AutoTokenizer.from_pretrained("t5-base", use_fast=False)
+# model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
-# # Preprocess: we'll use the 'utterance' as input and 'emotion' as label
-# label_list= sorted(list(set(dataset['trian']['emotion'])))
-# label2id= {label: i for i, label in enumerate(label_list)}
-# id2label= {i:label for label, i in label2id.items()}
+# model2 = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
 
-# def preprocess(example):
-#     return{
-#         "text": example["utterance"],
-#         "label": label2id[example["emotion"]]
-#     }
+# # Optional: label mapping if needed (tweak if your coping_prompt_library uses slightly different labels)
+# label_map = {
+#     'joy': 'joy',
+#     'sad': 'sadness',
+#     'anger': 'anger',
+#     'surprise': 'surprise',
+#     'fear': 'fear',
+#     'love': 'love',
+#     'thankful': 'gratitude',
+#     'neutral': 'neutral',
+#     'anxious':'anxiety'
+# }
 
-# dataset= dataset.map(preprocess)
-# dataset= dataset.rename_column("text","text")
-# dataset= dataset.rename_column("label","labels")
-# dataset.set_format(type="torch", columns=["text","labels"])
+# def detect_emotion(text):
+#     output = model2(text)[0]  # e.g., {'generated_text': 'sad'}
+#     result = output['generated_text'].strip().lower()
+#     print("Raw model output:", result)  # Or st.write in Streamlit
 
-# # Load tokenizer and model
-# model_name = "distilbert-base-uncased"
-# tokenizer = AutoTokenizer.from_pretrained(model_name)
+#     # Map to standard label
+#     return label_map.get(result, result)
 
-# def tokenize(batch):
-#     return tokenizer(batch["text"], padding=True, truncation=True)
+from transformers import pipeline
 
-# tokenized_dataset = dataset.map(tokenize, batched=True)
+# Load the pretrained emotion classification model
+classifier = pipeline("text-classification", model="nateraw/bert-base-uncased-emotion")
 
-# model = AutoModelForSequenceClassification.from_pretrained(
-#     model_name,
-#     num_labels=len(label_list),
-#     id2label=id2label,
-#     label2id=label2id
-# )
+# Optional: Mapping to match your coping_prompt_library if needed
+label_map = {
+    "sadness": "sadness",
+    "joy": "joy",
+    "love": "love",
+    "anger": "anger",
+    "fear": "fear",
+    "surprise": "surprise",
+    "neutral": "neutral"
+}
 
-# # Define evaluation metrics
-# def compute_metrics(pred):
-#     labels = pred.label_ids
-#     preds = pred.predictions.argmax(-1)
-#     return {
-#         "accuracy": accuracy_score(labels, preds),
-#         "f1": f1_score(labels, preds, average="weighted")
-#     }
 
-# # Training arguments
-# training_args = TrainingArguments(
-#     output_dir="./emotion_classifier",
-#     evaluation_strategy="epoch",
-#     save_strategy="epoch",
-#     num_train_epochs=3,
-#     per_device_train_batch_size=16,
-#     per_device_eval_batch_size=16,
-#     logging_dir='./logs',
-#     logging_steps=10,
-#     load_best_model_at_end=True
-# )
+def detect_emotion(text):
+    negation_phrases = {
+    "not sad": "neutral",
+    "not angry": "neutral",
+    "not anxious": "neutral",
+    "not scared": "neutral",
+    }
 
-# trainer = Trainer(
-#     model=model,
-#     args=training_args,
-#     train_dataset=tokenized_dataset["train"].shuffle(seed=42).select(range(10000)),  # optionally subset
-#     eval_dataset=tokenized_dataset["validation"].select(range(2000)),
-#     tokenizer=tokenizer,
-#     compute_metrics=compute_metrics,
-# )
+    text_lower = text.lower()
+    for phrase, label in negation_phrases.items():
+        if phrase in text_lower:
+            return label
 
-# # Train!
-# trainer.train()
-# trainer.save_model("emotion_model")
-# tokenizer.save_pretrained("emotion_model")
+    result = classifier(text)[0]  # Output: {'label': 'joy', 'score': 0.98}
+    label = result['label'].lower()
+    print(f"Detected Emotion: {label} (score: {result['score']:.2f})")
+    return label_map.get(label, label)  # fallback if label isn't in map

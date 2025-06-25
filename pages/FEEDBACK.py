@@ -4,8 +4,6 @@ from gui import get_gui
 
 get_gui()
 
-# Set page config
-# st.set_page_config(page_title="User Feedback", page_icon="💬")
 
 # Custom CSS for theme
 st.markdown("""
