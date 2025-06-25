@@ -41,6 +41,19 @@ label_map = {
 }
 
 def detect_emotion(text):
+    lower_text = text.lower()
+
+    # Custom keyword matches first (strong override)
+    if any(word in lower_text for word in ["numb", "empty", "disconnected"]):
+        return "numbness"
+    if any(word in lower_text for word in ["burnt out", "burnout", "exhausted", "drained"]):
+        return "burnout"
+    if any(word in lower_text for word in ["overthinking", "panic", "anxious", "worried"]):
+        return "anxiety"
+    if any(word in lower_text for word in ["unmotivated", "hopeless", "what's the point"]):
+        return "motivation_loss"
+    
+    #If no keyword matches
     result = classifier(text)[0][0]  # Returns list of top emotion
     label = result['label'].lower()
     print(f"Detected Emotion: {label} (score: {result['score']:.2f})")

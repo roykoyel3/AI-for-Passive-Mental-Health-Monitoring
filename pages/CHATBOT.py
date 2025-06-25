@@ -26,6 +26,20 @@ def show_chatbot():
         st.session_state.chat_history = []
     if "chat_input" not in st.session_state:
         st.session_state.chat_input=""
+      
+# Callback to process input and clear it
+    def handle_input():
+        user_input = st.session_state.chat_input
+        if user_input:
+            st.session_state.chat_history.append(f"You: {user_input}")
+            emotion=detect_emotion(user_input)
+            bot_response=get_coping_prompt(emotion)
+            st.session_state.chat_history.append(f"Bot: {bot_response}'")
+        st.session_state.chat_input = ""  # Auto-clear
+
+# Display chat history
+    for msg in st.session_state.chat_history:
+        st.write(msg)
 
 # Chatbot input placeholder options
     placeholder_options = [
@@ -39,22 +53,6 @@ def show_chatbot():
 # Pick one randomly on each run
     if "placeholder" not in st.session_state:
         st.session_state.placeholder = random.choice(placeholder_options)
-
-      
-# Callback to process input and clear it
-    def handle_input():
-        user_input = st.session_state.chat_input
-        if user_input:
-            st.session_state.chat_history.append(f"You: {user_input}")
-            emotion=detect_emotion(user_input)
-            bot_response= emotion   #get_coping_prompt(emotion)
-            st.session_state.chat_history.append(f"Bot: {bot_response}'")
-        st.session_state.chat_input = ""  # Auto-clear
-
-
-# Display chat history
-    for msg in st.session_state.chat_history:
-        st.write(msg)
 
 # Input field with auto-clear on enter
     user_input=st.text_input("Type your message:",
