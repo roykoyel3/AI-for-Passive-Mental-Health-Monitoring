@@ -44,7 +44,6 @@ label_map = {
     "neutral": "neutral"
 }
 
-
 def detect_emotion(text):
     negation_phrases = {
     "not sad": "neutral",
