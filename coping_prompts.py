@@ -37,6 +37,8 @@ coping_prompt_library = {
         "Want help breaking things into smaller steps, or do you just want space to breathe?",
     )
     
+    
+    
 }
 
 def get_coping_prompt(emotion: str) -> str:
