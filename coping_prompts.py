@@ -1,4 +1,3 @@
-# coping_prompts.py
 import random
 
 coping_prompt_library = {
@@ -88,7 +87,7 @@ coping_prompt_library = {
         "There is no right timeline for grief. Honor your heart’s pace.",
     ],
     "joy": [
-        "Let joy be loud. You don’t have to shrink your happiness for anyone.",
+        "Let the joy be loud. You don’t have to shrink your happiness for anyone.",
         "Joy doesn’t always mean life is perfect — it means you found light anyway.",
         "Soak in the joy — even a single moment can nourish your whole self.",
     ],
@@ -98,10 +97,11 @@ coping_prompt_library = {
         "You deserve love — in giving it and in receiving it without conditions.",
     ],
     "nervousness": [
-        "Nervousness often comes before something brave — you’re stepping into growth.",
-        "It’s okay to feel nervous — it means you care about the outcome.",
-        "Let nervousness ride with you, not steer. You’re more ready than you think.",
+        "It’s okay to feel a little shaky — sometimes that’s just your heart reminding you that this matters.",
+        "Take a breath — being nervous just means something new is unfolding.",
+        "You don’t need to have it all figured out. Just move gently — you’re doing better than you think.",
     ],
+
     "optimism": [
         "Let optimism guide you — even the tiniest hope can light the way forward.",
         "It’s okay to feel optimistic, even when things are uncertain — you’re choosing belief.",
@@ -138,36 +138,41 @@ coping_prompt_library = {
         "Sometimes, being neutral is your nervous system’s way of resting — honor that.",
     ],
     "numbness": [
-        "Numbness doesn’t mean you don’t care — it means you’ve been carrying too much for too long.",
-        "It’s okay to feel nothing — your feelings may just be resting before they return.",
-        "When you're numb, try gentle reconnection — light, music, movement, anything soft.",
+        "It’s okay if you don’t feel much right now — this might be your mind’s way of protecting you.",
+        "Even if everything feels distant, you’re still here, still real. That matters.",
+        "When you’re ready, tiny things — like a favorite sound or warm light — can help you slowly reconnect.",
     ],
+
     "burnout": [
-        "Burnout is not a personal failure — it’s a sign you’ve been trying to do too much for too long.",
-        "If you're feeling burnt out, your mind and body are asking for rest, not judgment.",
-        "You don’t need to push through burnout. You need to pause — and heal.",
+        "You’ve been holding so much for so long — no wonder you’re tired. You’re allowed to pause.",
+        "It’s okay to step back, even from things you care about. Rest isn’t quitting — it’s caring for your flame.",
+        "Burnout doesn’t mean you’re broken. It means you were trying, and now you need to breathe.",
     ],
+
     "motivation_loss": [
-        "Losing motivation doesn’t mean you’ve lost your purpose — just that you need rest or redirection.",
-        "It’s okay to feel unmotivated. Start with the tiniest step — even stillness counts.",
-        "Motivation fades sometimes — it doesn’t mean you’ve failed, it means you’re human.",
+        "If it’s hard to start, start tiny — a breath, a blink, a moment of stillness. That counts.",
+        "You’re not lazy. You’re likely overwhelmed, or just deeply tired. Be gentle with yourself.",
+        "Motivation comes and goes. You’re still worthy in the quiet in-between.",
     ],
-     "stress": [
-        "Stress is your body asking for care — even small pauses can help you return to center.",
-        "You are not your stress. You are the calm underneath it, waiting to be remembered.",
-        "Let the stress move through, not build up — one breath, one moment at a time.",
+
+    "stress": [
+        "You’ve been carrying a lot — it’s okay to set it down, even for a little while.",
+        "Not everything needs to be fixed right now. Just being here is enough.",
+        "Try this moment: one slow breath, a soft shoulder, and the thought that maybe, just maybe, you’re allowed to rest.",
     ],
+
     "frustration": [
-        "Frustration is a signal — not failure. Let it guide your next gentle step.",
-        "It’s okay to feel stuck or irritated — take space, not blame.",
-        "Your frustration is valid. You’re trying — and that matters.",
+        "It’s okay to feel stuck — you’re doing your best inside a moment that’s hard.",
+        "Frustration is just your heart wanting things to go differently. Let that be a signal, not a shame.",
+        "If nothing feels right, take space. You don’t have to fix it all right now.",
     ],
+
     "tiredness": [
-        "Tiredness means you’ve been carrying a lot. Rest is not a reward — it’s a right.",
-        "You don’t have to earn rest. Being tired is reason enough.",
-        "It’s okay to stop, to lay down the weight. Your energy will return in time.",
+        "You don’t have to push right now — sometimes the kindest thing is to rest.",
+        "If you're tired, it's because you've been trying. That matters more than you know.",
+        "Let yourself slow down. Rest isn’t laziness — it’s a quiet kind of courage.",
     ],
-    
+
     "anxiety": [
         "I hear that you’re feeling anxious, and that’s completely okay — anxiety can be overwhelming at times.\n",
         "You're not alone in this. Try grounding yourself with a quick exercise:\n",

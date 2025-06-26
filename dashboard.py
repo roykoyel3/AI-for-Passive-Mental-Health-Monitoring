@@ -8,6 +8,11 @@ from shap_analysis import get_shap
 from burnout import get_burnout
 from gui import get_gui
 
+
+# Wipe cached data every time the script starts (dev only)
+st.cache_data.clear()
+st.cache_resource.clear()
+
 # Page title
 st.markdown(
     "<h1 style='color: #866fc6;'>Passive Mental Health Dashboard</h1>",
