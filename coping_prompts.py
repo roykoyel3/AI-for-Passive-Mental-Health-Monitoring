@@ -96,6 +96,7 @@ coping_prompt_library = {
         "Feeling love? Let it flow freely, with kindness toward yourself too.",
         "You deserve love — in giving it and in receiving it without conditions.",
     ],
+    
     "nervousness": [
         "It’s okay to feel a little shaky — sometimes that’s just your heart reminding you that this matters.",
         "Take a breath — being nervous just means something new is unfolding.",
@@ -137,6 +138,7 @@ coping_prompt_library = {
         "Neutral isn’t numbness. It’s often your mind finding calm in the in-between.",
         "Sometimes, being neutral is your nervous system’s way of resting — honor that.",
     ],
+
     "numbness": [
         "It’s okay if you don’t feel much right now — this might be your mind’s way of protecting you.",
         "Even if everything feels distant, you’re still here, still real. That matters.",
@@ -212,14 +214,47 @@ coping_prompt_library = {
     
 }
 
+# coping_exercises_library.py
+exercise_library = {
+    "stress": [
+        "🌬 Try box breathing: Inhale for 4, hold for 4, exhale for 4, hold for 4.",
+        "🧘‍♀️ Gentle shoulder rolls and neck stretches can help release built-up tension."
+    ],
+    "burnout": [
+        "🪷 Lie down and try a full-body scan meditation.",
+        "🧘 Take 5 minutes to sit quietly with your eyes closed and just breathe."
+    ]
+}
+
+# resource_links_library.py
+links_library = {
+    "stress": [
+        "https://www.youtube.com/watch?v=aNXKjGFUlMs",  # breathing
+        "https://www.youtube.com/watch?v=O29e4rRMrV4"   # 5-min meditation
+    ],
+    "burnout": [
+        "https://www.youtube.com/watch?v=ZToicYcHIOU",  # mindful breathing
+        "https://www.youtube.com/watch?v=Fk9v8QYI4y8"    # burnout recovery affirmations
+    ]
+}
+
 def get_coping_prompt(emotion: str) -> str:
     """
     Returns a coping prompt for a given emotional state.
     If the emotion is not recognized, returns a default supportive message.
     """
-    prompts=coping_prompt_library.get(emotion)
-    if prompts:
-        return random.choice(prompts)
+       
+    prompt = random.choice(coping_prompt_library.get(emotion, {})) 
+    exercise = random.choice(exercise_library.get(emotion, [""])) if emotion in exercise_library else ""
+    link = random.choice(links_library.get(emotion, [""])) if emotion in links_library else ""
+    
+    response = prompt
+    if exercise:
+        response += f"\n\n Try this: {exercise}"
+    if link:
+        response += f"\n\n Watch this if it helps: {link}"
+        return response
     else:
-        return "I'm here for you. It's okay to not be okay. Would you like to talk or try a calming activity?"
+        return """I'm here. 
+                What's on your mind? Take your time and tell me what's going on? """
     

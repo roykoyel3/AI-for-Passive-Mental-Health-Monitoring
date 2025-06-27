@@ -64,18 +64,19 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_
 regressor = RandomForestRegressor(random_state=42)
 regressor.fit(X_train, y_train)
 
-# def evaluate_model(regressor, X_test, y_test):
-#     y_pred = regressor.predict(X_test)
-#     rmse = mean_squared_error(y_test, y_pred) #How close the predicted burnout score is close to the actual ones
-#     rr = r2_score(y_test, y_pred) #How much of the variation in burnout scores is explained by the model
-#     # return rmse, rr, y_pred 
-#     return None
+def evaluate_model(regressor, X_test, y_test):
+    y_pred = regressor.predict(X_test)
+    rmse = mean_squared_error(y_test, y_pred) #How close the predicted burnout score is close to the actual ones
+    rr = r2_score(y_test, y_pred) #How much of the variation in burnout scores is explained by the model
+    # return rmse, rr, y_pred 
+    return None
 
 
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 st.subheader(" Overall Distribution of Burnout Trends ")
+st.markdown('<div class="subtitle"> This chart shows how burnout levels are distributed among users. Each bar represents how many users fall into a certain burnout score range, helping us understand the general trend and frequency of burnout across the user base.</div', unsafe_allow_html=True)
 
 fig, ax = plt.subplots()
 sns.histplot(df['burnout_score'], bins=10, kde=True, ax=ax)
