@@ -65,7 +65,7 @@ shap_values_latest= explainer(latest_user)
 
 # Plot SHAP
 st.subheader("Factors Behind Your Burnout Prediction")
-st.write(f"Predicted burnout score: **{predicted_burnout:.2f}")
+st.write(f"Predicted burnout score: **{predicted_burnout:.2f}**")
 
 #Waterfall plot(SHAP for individual user)
 fig, ax = plt.subplots()

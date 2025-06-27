@@ -208,8 +208,33 @@ coping_prompt_library = {
         "You're not expected to handle it all at once.\n",
         "Try writing down the 3 most urgent things — then pick just one small thing to do.\n",
         "Want help breaking things into smaller steps, or do you just want space to breathe?",
-    ]
+    ],
     
+    "greetings":[
+        "Hey there. I’m glad you stopped by. How are you feeling today?",
+        "Hello 👋 I’m here for you. Need to talk about something?",
+        "Hey! Whatever’s on your mind, you don’t have to carry it alone.",
+    ],
+    "adieus":[
+        "Take care, okay? I’m always here when you need to talk.",
+        "Goodbye for now — remember, you’re stronger than the thoughts that try to pull you down.",
+        "See you soon! Until then, be kind to yourself in the little moments.",
+    ],
+    "morning_wishes":[
+        "Good morning ☀️ A new day means new chances — take it slow, one step at a time.",
+        "Rise gently. You don’t have to feel 100% to start the day — just begin.",
+        "Good morning 💛 Let’s start today with some kindness for yourself.",
+    ],
+    "afternoon_wishes":[
+        "Hope your day is treating you gently. Remember to take a breath if it feels heavy.",
+        "Good afternoon 🌼 It’s okay to pause and reset even in the middle of the day.",
+        "Sending you a midday reminder: you’re allowed to not have it all figured out.",
+    ],
+    "night_wishes":[
+        "Good night 🌙 I hope your mind gets to rest and your heart feels lighter by morning.",
+        "Sleep well. Even the heaviest days pass. Tomorrow is a new start.",
+        "Rest gently tonight — you deserve peace, not pressure. You’ve done enough for today.",
+    ],
     
     
 }
@@ -242,18 +267,20 @@ def get_coping_prompt(emotion: str) -> str:
     """
     Returns a coping prompt for a given emotional state.
     If the emotion is not recognized, returns a default supportive message.
-    """
-       
+    """  
     prompt = random.choice(coping_prompt_library.get(emotion, {})) 
     exercise = random.choice(exercise_library.get(emotion, [""])) if emotion in exercise_library else ""
     link = random.choice(links_library.get(emotion, [""])) if emotion in links_library else ""
     
-    response = prompt
-    if exercise:
-        response += f"\n\n Try this: {exercise}"
-    if link:
-        response += f"\n\n Watch this if it helps: {link}"
+    if prompt:
+        response = prompt
+        if exercise:
+            response += f"\n\n Try this: {exercise}"
+        if link:
+            response += f"\n\n Watch this if it helps: {link}"
+            return response
         return response
+    
     else:
         return """I'm here. 
                 What's on your mind? Take your time and tell me what's going on? """

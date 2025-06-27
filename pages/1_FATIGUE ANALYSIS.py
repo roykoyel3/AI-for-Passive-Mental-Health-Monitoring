@@ -68,7 +68,7 @@ def evaluate_model(regressor, X_test, y_test):
     y_pred = regressor.predict(X_test)
     rmse = mean_squared_error(y_test, y_pred) #How close the predicted burnout score is close to the actual ones
     rr = r2_score(y_test, y_pred) #How much of the variation in burnout scores is explained by the model
-    # return rmse, rr, y_pred 
+    return rmse, rr, y_pred 
     return None
 
 

@@ -52,7 +52,7 @@ def detect_emotion(text):
         return "anxiety"
     if any(word in lower_text for word in ["unmotivated", "hopeless", "what's the point", "good for nothing", "useless", "worthless"]):
         return "motivation_loss"
-    if any(word in lower_text for word in ["exhausted", "drained", "dead tired", "running on empty"]):
+    if any(word in lower_text for word in ["exhausted", "drained", "dead tired", "running on empty", "low"]):
         return "fatigue"
     if any(word in lower_text for word in ["tense", "worried", "restless"]):
         return "stress"
@@ -62,6 +62,16 @@ def detect_emotion(text):
         return "tiredness"
     if any(word in lower_text for word in ["lost", "distraught", "drowning", "burdened"]):
         return "overwhelmed"
+    if any(word in lower_text for word in ["hi", "hello", "hey", "what's up"]):
+        return "greetings"
+    if any(word in lower_text for word in["bye", "goodbye", "see you"]):
+        return "adieus"
+    if any(word in lower_text for word in["good morning", "morning"]):
+        return "morning_wishes"
+    if any(word in lower_text for word in["good afternoon", "good day"]):
+        return "afternoon_wishes"
+    if any(word in lower_text for word in["good night", "night"]):
+        return "night_wishes"
     
     #If no keyword matches
     result = classifier(text)[0][0]  # Returns list of top emotion
