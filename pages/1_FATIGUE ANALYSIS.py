@@ -39,6 +39,16 @@ with col3:
     st.markdown('<div class="score-card">', unsafe_allow_html=True)
     circular_progress_chart(screen, "Screen")
     st.markdown('</div>', unsafe_allow_html=True)
+    
+st.markdown('''🟣 Fatigue Scores\n\n
+Typing | Voice | Screen\n
+  **Percentage of detected fatigue in each input mode, based on behavioral patterns.**\n
+
+- **Typing Score** → Reflects fatigue signs in typing speed, rhythm, and pauses.
+
+- **Voice Score** → Evaluates vocal strain, pitch shifts, and speech rate.
+
+- **Screen Score** → Assesses screen exposure time and interaction intensity.''',unsafe_allow_html=True)
 
 st.header("Burnout Score") 
 st.text("The burnout score is a single metric that reflects your current mental fatigue level based on your typing, voice, and screen activity patterns.")   
@@ -77,7 +87,7 @@ import matplotlib.pyplot as plt
 
 st.subheader(" Overall Distribution of Burnout Trends ")
 st.markdown('<div class="subtitle"> This chart shows how burnout levels are distributed among users. Each bar represents how many users fall into a certain burnout score range, helping us understand the general trend and frequency of burnout across the user base.</div', unsafe_allow_html=True)
-
+st.markdown(" ")
 fig, ax = plt.subplots()
 sns.histplot(df['burnout_score'], bins=10, kde=True, ax=ax)
 ax.set_xlabel("Burnout Score")
@@ -97,13 +107,15 @@ def classify_burnout(score):
 burnout_level=df['burnout_score'].apply(classify_burnout)
 # Plot
 st.subheader(" Burnout Severity Classification (Across Users)")
+st.markdown('<div class="subtitle">Most users fall under the moderate burnout category, while fewer exhibit low or high burnout levels — indicating a concerning trend toward rising mental fatigue.</div', unsafe_allow_html=True)
+st.markdown(" ")
 level_counts = burnout_level.value_counts()
 level_counts=level_counts.reindex(['Low','Moderate','High'], fill_value=0)
 st.bar_chart(level_counts)
 
 st.subheader(" Common Fatigue Patterns Among Users")
 st.markdown('<div class="subtitle">Based on patterns from multiple users like you, we have identified common burnout patterns. Each color represents a group of users with similar fatigue combinations.</div>', unsafe_allow_html=True)
-
+st.markdown(" ")
 import numpy as np
 from scipy.spatial import ConvexHull
 from sklearn.cluster import KMeans
