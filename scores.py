@@ -3,7 +3,7 @@ import pandas as pd
 
 def get_user():
     # Load data
-    df = pd.read_csv("fused_scores.csv")
+    df = pd.read_csv("synthetic_output_final.csv")
     # # Show user selector
     # user_list=df['user_id'].unique().tolist()
     # selected_user=st.selectbox("Select a user", user_list, key="user_selectbox")
@@ -22,8 +22,9 @@ def get_score(user_data):
     typing = user_data['typing_score']
     voice = user_data['voice_score']
     screen = user_data['screen_score']
+    burnout = user_data['burnout_score']
     
-    return typing, voice, screen
+    return typing, voice, screen, burnout
 
 
 def burnout(typing,voice,screen):

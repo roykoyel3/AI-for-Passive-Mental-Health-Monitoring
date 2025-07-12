@@ -8,8 +8,8 @@ from burnout import get_burnout, get_sugg
 get_gui()
 
 user_data=get_user()
-typing, voice, screen= get_score(user_data)
-burnout_score=burnout(typing, screen, voice)
+typing, voice, screen, burnout_score= get_score(user_data)
+# burnout_score=burnout(typing, screen, voice)
 
 st.markdown(
     "<h1 style='color: #866fc6;'>Fatigue Analysis</h1>",
@@ -63,7 +63,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
 # Load data
-df = pd.read_csv("fused_scores.csv")
+df = pd.read_csv("synthetic_output_final.csv")
 X = df[['typing_score', 'voice_score', 'screen_score']]
 y = df['burnout_score']
 
@@ -79,8 +79,7 @@ def evaluate_model(regressor, X_test, y_test):
     rmse = mean_squared_error(y_test, y_pred) #How close the predicted burnout score is close to the actual ones
     rr = r2_score(y_test, y_pred) #How much of the variation in burnout scores is explained by the model
     return rmse, rr, y_pred 
-    return None
-
+    
 
 import seaborn as sns
 import matplotlib.pyplot as plt

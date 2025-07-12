@@ -33,7 +33,7 @@ def show_chatbot():
         if user_input:
             st.session_state.chat_history.append(f"You: {user_input}")
             emotion=detect_emotion(user_input)
-            bot_response=get_coping_prompt(emotion)
+            bot_response= emotion #get_coping_prompt(emotion)
             st.session_state.chat_history.append(f"Bot: {bot_response}'")
         st.session_state.chat_input = ""  # Auto-clear
 

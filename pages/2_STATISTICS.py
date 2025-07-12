@@ -8,6 +8,14 @@ import streamlit as st
 import plotly.graph_objects as go
 from scores import get_score, get_user
 from gui import get_gui
+import shap
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import streamlit as st
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+
 
 get_gui()
 
@@ -22,7 +30,7 @@ st.markdown("""
             """, unsafe_allow_html=True)
 
 user_data=get_user()
-typing, voice, screen= get_score(user_data)
+typing, voice, screen, burnout_score = get_score(user_data)
 
 st.markdown(
     "<h1 style='color: #866fc6;'>SHAP Analysis for Burnout Prediction</h1>",
@@ -33,16 +41,19 @@ st.markdown('<div class="subtitle">SHapley Additive exPlanations', unsafe_allow_
 
 st.markdown("---")
 
-import shap
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import streamlit as st
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+# Set background and text color globally
+plt.rcParams.update({
+    'figure.facecolor': "#0F1117",      # Chart background
+    'axes.facecolor': '#0F1117',        # Axis background
+    'savefig.facecolor': '#0F1117',     # Saved figure background
+    'text.color': 'white',              # Text and labels
+    'axes.labelcolor': 'white',
+    'xtick.color': 'white',
+    'ytick.color': 'white',
+})
 
 # Data load
-data=pd.read_csv("fused_scores.csv")
+data=pd.read_csv("synthetic_output_final.csv")
 
 # Split features and target
 x= data[['typing_score','voice_score','screen_score']] #Features
@@ -70,7 +81,7 @@ st.write(f"Predicted burnout score: **{predicted_burnout:.2f}**")
 #Waterfall plot(SHAP for individual user)
 fig, ax = plt.subplots()
 shap.plots.waterfall(shap_values_latest[0], show=False)
-st.pyplot(fig)  # ✅ pass the figure object explicitly
+st.pyplot(fig)  # pass the figure object explicitly
 plt.clf()
 
 # Train model
@@ -89,7 +100,7 @@ st.pyplot(fig_summary)
 
 # SHAP Force Plot (individual prediction explanation)
 st.subheader("Understand Your Score Composition")
-index = st.slider("Select a user index", 0, len(data)-1, 0) #may give an error replace data with x_train
+index = st.slider("Select a user index", 0, len(x_train), 0) #may give an error replace data with x_train
 fig_force, ax = plt.subplots(figsize=(10, 2))
 with plt.rc_context({'figure.figsize': (10, 2)}):
     shap.plots.force(

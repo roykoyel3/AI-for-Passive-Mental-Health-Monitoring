@@ -30,10 +30,10 @@ with left:
     user_data=get_user()
     
 # Extract scores
-typing, voice, screen = get_score(user_data)
+typing, voice, screen, burnout_score= get_score(user_data)
     
 # Calculate burnout score
-burnout_score=burnout(typing, voice, screen)
+# burnout_score=burnout(typing, voice, screen)
 
 # Create two columns
 left_col, spacer, right_col= st.columns([1, 0.5, 2])  
